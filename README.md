@@ -40,7 +40,7 @@ browse ```http://127.0.0.1:8888/admin```
 
 ### Licence
 
-Copyright (c) 2014, Zeroling <wensonlee@gmail.com>
+Copyright (c) 2014, Wilson Lee <wensonlee@gmail.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
