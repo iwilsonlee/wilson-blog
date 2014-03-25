@@ -60,10 +60,10 @@
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li>
+                <li class="active">
                     <a href="../">文章</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="../galleries">相册</a>
                 </li>
 
@@ -91,12 +91,18 @@
     <ul class="list-group pull-right list-unstyled" style="width:180px; padding-top: 20px;">
         <li class="list-group-item">Tag:</li>
         <li class="list-group-item">
-            <p><a href="#"><span class="label label-default">col-md-4</span></a>
-            <a href="#"><span class="label label-primary">cfe4</span></a>
-            <a href="#"><span class="label label-success">col-</span></a> </p>
-            <a href="#"><span class="label label-info">fdgfd</span></a>
-            <a href="#"><span class="label label-warning">core</span></a>
-            <a href="#"><span class="label label-danger">co3e4</span></a>
+            <%
+
+            var color = ['default','primary','success','info','warning','danger'];
+            var k = 0;
+            for(var i=0; i<tags.length; i++){%>
+            <span style="Line-height:30px;"><a href="/<%=tags[i].name%>"><span class="label label-<%=color[k]%>"><%=tags[i].name%></span></a> </span>
+            <%
+            k++;
+            if(k>5)k=0;
+            %>
+            <%}%>
+
         </li>
     </ul>
     <div class="row">

@@ -1,5 +1,5 @@
 /**
- * link 模型
+ * tag 模型
  */
 
 var mongo = require('./db');
@@ -11,7 +11,14 @@ function Tag(name) {
 
 module.exports = Tag;
 
-Tag.prototype.save = function (callback){
+/**
+ * [get description]获取最多amount数量的tag,tid倒序,pv无影响
+ * @param  {[type]}   arr   [tag組合]
+ * @param  {Function} cb [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
+Tag.prototype.save = function (arr,cb,callback){
 	//要存入数据库的文档
 	var tag = {
 		name: this.name
@@ -33,22 +40,50 @@ Tag.prototype.save = function (callback){
                 }
                 if(doc){
                     db.close();
-                    callback(null);
+                    callback(null,arr, cb);
                 }else{
-                    collection.find({}, {sort: {tid: -1}, limit:1}).toArray(function(err, last){
+                    Tag.getLast(function(err,last){
+                        if(err) {
+                            db.close;
+                            return callback(err);
+                        }
                         tag.tid = last[0] ? parseInt(last[0].tid) + 1 : 1;
                         collection.insert(tag, {safe: true}, function (err){
                             db.close();
                             if(err) return callback(err);
-                            callback(null);
+                            callback(null,arr, cb);
                         });
                     });
+
                 }
             });
 
 		});
 	});
 };
+
+Tag.getLast = function(callback){
+    mongo(function(err, db){
+        if(err){
+            db.close;
+            return callback(err);
+        }
+        db.collection('tags', function(err, collection){
+            if(err){
+                db.close;
+                return callback(err);
+            }
+            collection.find({},{sort: {tid: -1}, limit:1}).toArray(function(err, last){
+                if(err){
+                    db.close;
+                    return callback(err);
+                }
+                callback(null,last);
+            });
+        });
+    });
+
+}
 
 /**
  * [get description]获取最多amount数量的tag,tid倒序,pv无影响

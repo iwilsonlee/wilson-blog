@@ -39,16 +39,26 @@ module.exports = function(nb){
                                     req.flash('error', "Fetch links error!");
                                     return res.redirect('/404');
                                 }
-                                res.render('index', {
-                                    title: site.title,
-                                    site: site,
-                                    emotions: emotions,
-                                    posts: posts,
-                                    galleries: galleries,
-                                    links: links,
-                                    success: req.flash('success').toString(),
-                                    error: req.flash('error').toString()
+
+                                Tag.get(20, function(err, tags){
+                                    if (err) {
+                                        req.flash('error', "Fetch tags error!");
+                                        return res.redirect('/404');
+                                    }
+
+                                    res.render('index', {
+                                        title: site.title,
+                                        site: site,
+                                        emotions: emotions,
+                                        posts: posts,
+                                        galleries: galleries,
+                                        links: links,
+                                        tags:tags,
+                                        success: req.flash('success').toString(),
+                                        error: req.flash('error').toString()
+                                    });
                                 });
+
                             });
                         });
                     });
@@ -58,6 +68,62 @@ module.exports = function(nb){
             }
         });
         
+	});
+
+    //主页
+    nb.get('/:tag', function(req, res){
+        var tagName = req.params.tag;
+        User.count(function(err, num){
+            if(num != 0){
+                Emotion.get(site.indexEmotionAmount, function (err, emotions) {
+                    if (err) {
+                        req.flash('error', "Fetch emotions error!");
+                        return res.redirect('/404');
+                    }
+                    Post.getByTag(site.indexPostAmount,tagName, function (err, posts) {
+                        if (err) {
+                            req.flash('error', "Fetch posts error!");
+                            return res.redirect('/404');
+                        }
+                        Gallery.get(site.indexGalleryAmount, function (err, galleries) {
+                            if (err) {
+                                req.flash('error', "Fetch galleries error!");
+                                return res.redirect('/404');
+                            }
+                            Link.get(site.indexLinkAmount, function (err, links) {
+                                if (err) {
+                                    req.flash('error', "Fetch links error!");
+                                    return res.redirect('/404');
+                                }
+
+                                Tag.get(20, function(err, tags){
+                                    if (err) {
+                                        req.flash('error', "Fetch tags error!");
+                                        return res.redirect('/404');
+                                    }
+
+                                    res.render('index', {
+                                        title: site.title,
+                                        site: site,
+                                        emotions: emotions,
+                                        posts: posts,
+                                        galleries: galleries,
+                                        links: links,
+                                        tags:tags,
+                                        success: req.flash('success').toString(),
+                                        error: req.flash('error').toString()
+                                    });
+                                });
+
+                            });
+                        });
+                    });
+                });
+            }else{
+                res.redirect('/admin/reg');
+            }
+        });
+
 	});
 
 	nb.get('/emotion/:eid.html', function (req, res, next) {
@@ -350,23 +416,27 @@ module.exports = function(nb){
 					req.flash('error', err); 
 					return res.redirect('/admin');
 				}
-                saveTag(tags,function(){
+                saveTag(null,tags,function(err){
+                    if(err){
+                        req.flash('error', err);
+                        return res.redirect('/admin');
+                    }
                     req.flash('success', 'Successful!');
                     res.redirect('/admin');
                 });
 
 
-
 			});
 	});
 
-    function saveTag(arr,callback){
+
+    function saveTag(err,arr,callback){
         var tagname = arr.shift();
-        if(!tagname){
-            callback();
-        }else{
+        if(tagname){
             var theTag = new Tag(tagname);
-            theTag.save(saveTag(arr,callback));
+            theTag.save(arr,callback,saveTag);
+        }else{
+            callback(err);
         }
     }
 
@@ -639,13 +709,13 @@ module.exports = function(nb){
     })
 
 	//404
-	nb.use(function(req, res) {
-        res.render('404', {
-       	site: site,
-        success: req.flash('success').toString(),
-        error: req.flash('error').toString()
-       });
-	});
+//	nb.use(function(req, res) {
+//        res.render('404', {
+//       	site: site,
+//        success: req.flash('success').toString(),
+//        error: req.flash('error').toString()
+//       });
+//	});
 
 	function preCheckLogin(req, res, next){
 		if(!req.session.user){

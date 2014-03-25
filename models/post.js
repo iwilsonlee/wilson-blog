@@ -161,6 +161,49 @@ Post.get = function (amount, callback) {
 };
 
 /**
+ * [get 获取最多amount数量的文章,pid倒序,pv无影响,不markdown解析]
+ * @param  {[Number]}   amount   [需要获取的文章数量]
+ * @param  {[String]}   tag   [tag名稱]
+ * @param  {Function} callback [回调函数]
+ */
+Post.getByTag = function (amount,tagName, callback) {
+    mongo(function (err, db) {
+		if(err){
+			db.close();
+			return callback(err);
+		}
+		db.collection('posts', function (err, collection) {
+			if(err){
+				db.close();
+				return callback(err);
+			}
+			collection.count({'tags':{'$all':[tagName]}}, function (err, total) {
+				if(err){
+					db.close();
+					return callback(err);
+				}
+				var skip = 0;
+				collection.find({'tags':{'$all':[tagName]}}, {
+					skip: skip,
+					limit: amount
+				}).sort({pid: -1}).toArray(function (err, docs) {
+					db.close();
+					if(err) return callback(err);
+					docs.forEach(function (doc) {
+						doc.titlesub = doc.title.sub(14);
+						marked(doc.content, {sanitize: false}, function (err, content){
+							if(err) return console.log(err);
+							doc.content = content.replace(/<\/?.+?>/g,"").sub(150);
+						});
+					});
+					callback(null, docs);
+				});
+			});
+		});
+	});
+};
+
+/**
  * [edit 这回返回不markdown解析过的原始文档]
  * @param  {[Number]}   pid      [文章ID]
  * @param  {Function} callback [回调函数]
