@@ -1,110 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Bootstrap 101 Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-
-    <link rel="stylesheet" href="/stylesheets/bootstrap.css">
-    <link rel="stylesheet" href="/stylesheets/docs.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        body {
-            font-family: "ff-tisa-web-pro-1", "ff-tisa-web-pro-2", "Lucida Grande", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", sans-serif;
-        }
-
-        h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
-            font-family: "ff-tisa-web-pro-1", "ff-tisa-web-pro-2", "Lucida Grande", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "Microsoft YaHei UI", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
-        }
-
-        pre code {
-            background: transparent;
-        }
-
-        @media (min-width: 768px) {
-            .bs-docs-home .bs-social,
-            .bs-docs-home .bs-masthead-links {
-                margin-left: 0;
-            }
-        }
-
-        .bs-docs-section p {
-            line-height: 2;
-        }
-
-        .bs-docs-section p.lead {
-            line-height: 1.4;
-        }
-
-
-    </style>
-</head>
-<body>
-
-
-<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-    <div class="container">
-        <div class="navbar-header">
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="../" class="navbar-brand">Wilson's blog</a>
-        </div>
-        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="../">文章</a>
-                </li>
-                <li>
-                    <a href="../galleries">相册</a>
-                </li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="../about">关于</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<div class="bs-header" id="content">
-    <div class="container">
-        <h1>山人</h1>
-
-        <p>@Wilson Lee</p>
-
-    </div>
-</div>
-
-<div class="container">
-
-    <ul class="list-group pull-right list-unstyled" style="width:180px; padding-top: 20px;">
-        <li class="list-group-item">Tag:</li>
-        <li class="list-group-item">
-            <%
-
-            var color = ['default','primary','success','info','warning','danger'];
-            var k = 0;
-            for(var i=0; i<tags.length; i++){%>
-            <span style="Line-height:30px;"><a href="/<%=tags[i].name%>"><span class="label label-<%=color[k]%>"><%=tags[i].name%></span></a> </span>
-            <%
-            k++;
-            if(k>5)k=0;
-            %>
-            <%}%>
-
-        </li>
-    </ul>
+<%-include header.html%>
     <div class="row">
     <%
     var i=0;
@@ -113,11 +7,11 @@
 
         <%}%>
         <div class="col-xs-5">
-            <h2 class="page-header"><a href="post/<%= post.pid %>.html" rel="点击阅读 <%= post.title %>"
-                                       title="<%= post.title %>"><%= post.titlesub %></a></h2>
+            <h2 class="page-header"><a href="/post/<%= post.pid %>.html" rel="点击阅读 <%= post.title %>"
+                                       title="<%=post.title %>"><%= post.titlesub %></a></h2>
             <p><%= post.content %></p>
             <p>
-                <sapn class="text-muted"><%= post.time.day %></sapn>
+                <span class="text-muted"><%= post.time.day %></span>
                 <span class="text-muted">点击: <%= post.pv %>次</span>
                 <span class="text-muted">评论: <%= post.comments.length %>条</span>
             </p>
@@ -131,31 +25,4 @@
     </div>
 
 
-    <footer>
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-4">
-                <p>Powered By <a href="http://nodejs.org/">Node.js</a> / <a href="http://expressjs.com/">Express</a> /
-                    <a href="http://www.mongodb.org/">Mongo</a>
-
-                <p>Code By <a href="http://www.520608.com">520608.com</a>，Passing HTML 5.0 & CSS 3.0</p>
-
-                <p>© 2014 <a href="http://www.520608.com">520608.com</a> 版权所有</p>
-
-                <p><a href="/rss">RSS</a>&nbsp;|&nbsp;<a href="/admin">后台登录</a>&nbsp;|&nbsp;<a href="/sitemap.xml">Sitemap</a>
-                </p>
-
-                <form action="/search" method="GET">
-                    <p><input type="text" placeholder="Search..."/></p>
-                </form>
-            </div>
-        </div>
-    </footer>
-</div>
-
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-</body>
-</html>
+ <%-include footer.html%>

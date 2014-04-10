@@ -71,7 +71,7 @@ module.exports = function(nb){
 	});
 
     //主页
-    nb.get('/:tag', function(req, res){
+    nb.get('/tag/:tag', function(req, res){
         var tagName = req.params.tag;
         User.count(function(err, num){
             if(num != 0){
@@ -204,16 +204,24 @@ module.exports = function(nb){
 					req.flash('error', "Fetch posts error!!");
 					return res.redirect('/404');
 				}
-            	res.render("posts", {
-            	    title: post.title,
-            	    site: site,
-            	    links: links,
-            	    user: req.session.user,
-            	    post: post,
-            	    comments: post.comments,
-            	    success: req.flash('success').toString(),
-            	    error: req.flash('error').toString()
-            	});
+                Tag.get(20, function(err, tags){
+                    if (err) {
+                        req.flash('error', "Fetch tags error!");
+                        return res.redirect('/404');
+                    }
+                    res.render("posts", {
+                        title: post.title,
+                        site: site,
+                        links: links,
+                        user: req.session.user,
+                        post: post,
+                        comments: post.comments,
+                        tags:tags,
+                        success: req.flash('success').toString(),
+                        error: req.flash('error').toString()
+                    });
+                });
+
         	});
 		});
 	});

@@ -1,0 +1,16 @@
+<%- include header.html %>
+
+<div class="row">
+    <div class="col-xs-10">
+
+        <h2 class="page-header"><%= post.title %></h2>
+			<p><%- post.content %></p>
+			<p>
+                <span class="text-muted">发布时间: <%= post.time.minute %></span>
+                    <span class="text-muted">点击: <%= post.pv %>次</span>
+			</p>
+
+	</div>
+</div>
+
+<%- include footer.html %>
